@@ -1,4 +1,18 @@
 
+dist: trusty
 language: java
 sudo: false
-script: mvn clean verify
+
+jdk:
+  - oraclejdk8
+
+addons:
+  sonarcloud:
+    organization: "kedenk-github" # the key of the org you chose at step #3
+    token:
+      secure: 3742d6485b18be7b740a11d01c66f492d7e43891 # encrypted value of your token
+script:
+  - travis encrypt SOMEVAR="3742d6485b18be7b740a11d01c66f492d7e43891" --add
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
+  # other script steps might be done before running the actual analysis
+  - sonar-scanner
